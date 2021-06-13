@@ -1,0 +1,8 @@
+<div class="task-list__wrapper">
+    <app-task-list-item
+        *ngFor="let task of taskList; let i = index"
+        [task]="task"
+        [selectedTaskId]="selectedTaskId"
+        (click)="onTaskSelection(task.id)">
+    </app-task-list-item>
+</div>

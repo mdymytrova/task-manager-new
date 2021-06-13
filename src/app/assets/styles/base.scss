@@ -1,0 +1,17 @@
+$font-color: #333;
+$main-red: #ff5630;
+
+$light-gray: #ebebeb;
+$light-gray-accent: darken($light-gray, 15%);
+$light-gray-selection: darken($light-gray, 5%);
+
+$blue-header: #125699;
+$blue-header-hover: darken($blue-header, 15%);
+
+$border-bug-color: #cc0000;
+$border-todo-color: #cccb6b;
+$background-todo: #2684ff;
+$background-bug: $main-red;
+$icon-color-priority-high: $main-red;
+$icon-color-priority-low: #006587;
+$icon-color-priority-trivial: $light-gray-selection;

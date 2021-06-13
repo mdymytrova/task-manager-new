@@ -1,0 +1,77 @@
+@import '../../../assets/styles/base.scss';
+
+.task-list-item {
+    &__wrapper {
+        border: 1px solid $light-gray;
+        border-radius: .1rem;
+        border-left: 4px solid;
+        padding: .5rem 0;
+
+        cursor: pointer;
+        user-select: none;
+
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        &--selected {
+            background-color: $light-gray;
+        }
+
+        &--start {
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+        }
+
+        &--todo {
+            border-left-color: $border-todo-color;
+        }
+
+        &--bug {
+            border-left-color: $border-bug-color;
+        }
+
+        &--unset {
+            border-left-color: $light-gray;
+        }
+    }
+
+    &__type {
+        margin-left: 5px;
+        width: 24px;
+        &--todo {
+            color: $background-todo;
+        }
+        &--bug {
+            color: $background-bug;
+        }
+    }
+
+    &__priority {
+        margin-left: 5px;
+        width: 24px;
+        &--major, &--critical, &--blocker {
+            color: $icon-color-priority-high;
+        }
+        &--minor {
+            color: $icon-color-priority-low;
+        }
+        &--trivial {
+            color: $icon-color-priority-trivial;
+        }
+    }
+
+    &__id {
+        margin-left: 5px;
+        font-weight: bold;
+        color: $blue-header;
+    }
+
+    &__summary {
+        display: block;
+        line-height: 1rem;
+        margin-left: 5px;
+        font-weight: bold;
+    }
+}

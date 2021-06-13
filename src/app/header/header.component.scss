@@ -1,0 +1,57 @@
+@import '../assets/styles/base.scss';
+
+.navbar {
+    background-color: $blue-header;
+    display: flex;
+    align-items: center;
+    padding: .5rem;
+
+    ul {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        align-items:center;
+
+        li {
+            margin-right: 20px;
+            cursor: pointer;
+            a {
+                display: block;
+            }
+
+            &.active {
+                a {
+                    color: wheat;
+                }
+            }
+        }
+    }
+
+    a {
+        text-decoration: none;
+        color: #e7e7e7;
+    }
+
+    .brand {
+        display: block;
+        color: #e7e7e7;
+        padding: 0 24px;
+        font-size: 24px;
+    }
+}
+
+.header {
+    &__button {
+        &--create {
+            background-color: lighten($blue-header, 10%);
+            border-radius: 7px;
+            padding: .5rem .7rem;
+
+            &:hover {
+                background-color: darken($blue-header, 10%);
+            }
+        }
+    }
+}
+

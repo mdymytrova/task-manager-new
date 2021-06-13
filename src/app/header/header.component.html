@@ -1,0 +1,14 @@
+<nav class="navbar">
+    <a class="brand" href="#">Tasks</a>
+    <ul>
+        <li (click)="pageSelectionEventHandler(headerPages.BACKLOG)" routerLink="/tasks" routerLinkActive="active"><a>Backlog</a>
+        </li>
+        <li (click)="pageSelectionEventHandler(headerPages.DASHBOARD)" routerLink="/dashboard" routerLinkActive="active">
+            <a>Dashboard</a>
+        </li>
+        <li (click)="pageSelectionEventHandler(headerPages.SEARCH)" routerLink="/search" routerLinkActive="active">
+            <a>Search</a>
+        </li>
+        <button type="button" mat-raised-button [routerLink]="[{outlets: {'create': ['task']}}]" routerLinkActive="active">Create</button>
+    </ul>
+</nav>

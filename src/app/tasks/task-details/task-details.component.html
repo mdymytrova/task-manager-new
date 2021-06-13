@@ -1,0 +1,12 @@
+<div class="task-details__wrapper" *ngIf="task">
+    <h1>{{task.summary}}</h1>
+    <h4>Priority: {{task.priority | titlecase}}</h4>
+    <p>Created: {{task.createdOn | date}}</p>
+    <p>{{task.description}}</p>
+
+    <button type="button" *ngIf="mode === 'embedded'" mat-raised-button [routerLink]="['/tasks', {outlets: {'edit': [task.id]}}]">Edit</button>
+    <button type="button" *ngIf="mode === 'standalone'" mat-raised-button [routerLink]="['', {outlets: {'standalone-edit': ['task', task.id]}}]">Edit</button>
+    <button type="button" mat-raised-button color="warn" (click)="deleteTask()">Delete</button>
+    <button type="button" *ngIf="mode === 'embedded'" mat-raised-button [routerLink]="['/task', task.id]">Go to task</button>
+    <button type="button" *ngIf="mode === 'standalone'" mat-raised-button (click)="navigateBack()">Back</button>
+</div>

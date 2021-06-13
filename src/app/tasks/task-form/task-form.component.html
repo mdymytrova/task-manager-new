@@ -1,0 +1,51 @@
+<h2 mat-dialog-title>{{title}}</h2>
+
+<mat-dialog-content [formGroup]="form">
+  <mat-form-field>
+    <mat-label>Summary</mat-label>
+    <input matInput formControlName="summary">
+  </mat-form-field>
+
+  <div class="form-field-small--container">
+    <mat-form-field class="form-field-small">
+      <mat-label>Priority</mat-label>
+      <mat-select formControlName="priority">
+        <mat-option
+          *ngFor="let priority of priorityData"
+          [value]="priority">{{priority | titlecase }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  
+    <mat-form-field class="form-field-small">
+      <mat-label>Type</mat-label>
+      <mat-select formControlName="type">
+        <mat-option
+          *ngFor="let type of typeData"
+          [value]="type">{{type | titlecase }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  
+    <mat-form-field class="form-field-small">
+      <mat-label>Status</mat-label>
+      <mat-select formControlName="status">
+        <mat-option
+          *ngFor="let status of statusData"
+          [value]="status">{{status | taskStatus}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <mat-form-field>
+    <mat-label>Description</mat-label>
+    <textarea matInput formControlName="description"></textarea>
+  </mat-form-field>
+
+</mat-dialog-content>
+
+<mat-dialog-actions>
+    <button class="mat-raised-button"(click)="close()">Close</button>
+    <button class="mat-raised-button mat-primary"(click)="save()">Save</button>
+</mat-dialog-actions>
