@@ -1,11 +1,8 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Component } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 
 import { PageSelectionEventService } from '../services/page-selection-event.service';
-
-import { HeaderPage, TaskEventType } from '../tasks/enums';
-import { TaskEvent } from '../tasks/interfaces';
+import { HeaderPage } from '../tasks/enums';
 
 @Component({
     selector: 'app-header',
@@ -17,15 +14,15 @@ export class HeaderComponent {
     public headerPages = HeaderPage;
     public selectedPage: HeaderPage;
 
-    constructor(private pageSelectionEventService: PageSelectionEventService, private router: Router, private activatedRoute: ActivatedRoute, public matDialog: MatDialog) { }
+    constructor(private pageSelectionEventService: PageSelectionEventService, public matDialog: MatDialog) { }
 
     public ngOnInit(): void {
-        this.pageSelectionEventService.onPageSelect.emit(HeaderPage.BACKLOG);
+        this.pageSelectionEventService.onPageSelect.next(HeaderPage.BACKLOG);
     }
 
     public pageSelectionEventHandler = (selectedPage: HeaderPage) => {
         this.selectedPage = selectedPage;
-        this.pageSelectionEventService.onPageSelect.emit(selectedPage);
+        this.pageSelectionEventService.onPageSelect.next(selectedPage);
     }
 
 }
