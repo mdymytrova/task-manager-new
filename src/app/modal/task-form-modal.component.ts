@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Params, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 
 import { ITask } from '../tasks/interfaces';
@@ -22,7 +22,10 @@ export class TaskFormModalComponent extends ModalBaseComponent implements OnInit
     }
 
     public ngOnInit() {
-        this.taskId = this.route.snapshot?.params?.id;
+        this.route.params
+            .subscribe((params: Params) => {
+                this.taskId = params.id;
+            });
         const dialogData = this.getDialogData();
         this.openDialog(TaskFormComponent, dialogData, this.onClose);
     }
@@ -48,7 +51,7 @@ export class TaskFormModalComponent extends ModalBaseComponent implements OnInit
 
         if (task) {
             this.tasksDataService.updateTasks(eventType, task);
-            this.tasksEventService.onTaskListUpdate.emit({
+            this.tasksEventService.onTaskListUpdate.next({
                 eventType: eventType
             });
         }
