@@ -3,17 +3,16 @@ import { ActivatedRoute, Params, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 
 import { ITask } from '../tasks/interfaces';
-import { TaskEventType } from '../tasks/enums';
 import { TasksDataService } from '../services/tasks-data.service';
 import { TasksEventService } from '../services/tasks-event.service';
 import { TaskFormComponent } from '../tasks/task-form/task-form.component';
 import { ModalBaseComponent } from './modal-base.component';
+import { IModalDialogData } from './modal-config.interface';
 
 @Component({
     template: '',
 })
 export class TaskFormModalComponent extends ModalBaseComponent implements OnInit {
-    public title;
     public task: ITask;
     private taskId;
 
@@ -30,15 +29,14 @@ export class TaskFormModalComponent extends ModalBaseComponent implements OnInit
         this.openDialog(TaskFormComponent, dialogData, this.onClose);
     }
 
-    private getDialogData() {
+    private getDialogData(): IModalDialogData<ITask> {
         return {
             title: this.taskId ? 'Edit Task' : 'New Task',
-            task: this.taskId ? this.tasksDataService.getTaskById(this.taskId) : {}
+            data: this.taskId ? this.tasksDataService.getTaskById(this.taskId) : {} as ITask
         };
     }
 
     private onClose = (task) => {
-        const eventType = this.taskId ? TaskEventType.UPDATE : TaskEventType.CREATE;
         if (this.taskId) {
             if (this.route.snapshot.outlet === 'standalone-edit') {
                 this.router.navigateByUrl(`/task/${this.taskId}`);
@@ -47,13 +45,6 @@ export class TaskFormModalComponent extends ModalBaseComponent implements OnInit
             }
         } else {
             this.router.navigate([{ outlets: { create: null }}]);
-        }
-
-        if (task) {
-            this.tasksDataService.updateTasks(eventType, task);
-            this.tasksEventService.onTaskListUpdate.next({
-                eventType: eventType
-            });
         }
     }
 }

@@ -22,7 +22,7 @@ export class ModalBaseComponent {
         dialogConfig.disableClose = true;
         dialogConfig.autoFocus = true;
         dialogConfig.data = dialogData;
-        dialogConfig.panelClass = 'task-create';
+        dialogConfig.panelClass = 'task-modal-form';
         return dialogConfig;
     }
 }

@@ -47,15 +47,26 @@ p {
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
-.task-create {
+.task-modal-form {
   width: 40vw;
+  height: 80vh;
   .mat-dialog-content {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
+    height: 100%;
 
     .mat-form-field {
       width: 100%;
+      &.form-field-textarea {
+        height: 100%;
+        .mat-form-field-wrapper, .mat-form-field-flex {
+          height: calc(100% - 25px);
+        }
+        .mat-form-field-infix, textarea {
+          height: 100%;
+        }
+      }
     }
 
     .form-field-small {

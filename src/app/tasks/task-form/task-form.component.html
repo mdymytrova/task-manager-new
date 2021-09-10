@@ -3,7 +3,8 @@
 <mat-dialog-content [formGroup]="form">
   <mat-form-field>
     <mat-label>Summary</mat-label>
-    <input matInput formControlName="summary">
+    <input matInput formControlName="summary" [formControl]="form.get('summary')" required>
+    <mat-error *ngIf="form.get('summary').hasError('required')">Please add summary</mat-error>
   </mat-form-field>
 
   <div class="form-field-small--container">
@@ -38,14 +39,14 @@
     </mat-form-field>
   </div>
 
-  <mat-form-field>
+  <mat-form-field class="form-field-textarea">
     <mat-label>Description</mat-label>
-    <textarea matInput formControlName="description"></textarea>
+    <textarea matInput formControlName="description" [matTextareaAutosize]="false"></textarea>
   </mat-form-field>
 
 </mat-dialog-content>
 
-<mat-dialog-actions>
-    <button class="mat-raised-button"(click)="close()">Close</button>
-    <button class="mat-raised-button mat-primary"(click)="save()">Save</button>
+<mat-dialog-actions align="end">
+    <button mat-raised-button mat-dialog-close>Close</button>
+    <button mat-raised-button color="primary" (click)="save()" [disabled]="!form.valid">Save</button>
 </mat-dialog-actions>
