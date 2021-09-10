@@ -1,7 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { ITask } from '../interfaces';
-import { ActivatedRoute, Router } from '@angular/router';
+
 
 @Component({
   selector: 'app-task-list',

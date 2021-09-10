@@ -1,10 +1,17 @@
-<div class="tasks-container">
-    <app-task-list
-        class="task-list"
-        [taskList]="taskList">
-    </app-task-list>
-    <div class="task-details">
-        <router-outlet></router-outlet>
-        <router-outlet name="edit"></router-outlet> 
-    </div>
-</div>
+<mat-drawer-container class="drawer-container" autosize>
+    <mat-drawer-content>
+        <app-task-list [taskList]="taskList"></app-task-list>
+    </mat-drawer-content>
+    <mat-drawer
+        class="drawer-container__preview"
+        #drawer
+        mode="side"
+        position="end"
+        [opened]="previewOpen">
+            <div class="task-details">
+                <router-outlet (activate)="previewOpen=true" (deactivate)="previewOpen=false"></router-outlet>
+                <router-outlet name="edit"></router-outlet> 
+            </div>
+    </mat-drawer>
+
+  </mat-drawer-container>

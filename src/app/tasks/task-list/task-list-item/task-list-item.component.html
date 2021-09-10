@@ -1,4 +1,4 @@
-<a [routerLink]="[task.id]"
+<div [routerLink]="[task.id]"
     [ngClass]="task.type | typeBorder"
     [style.background-color]="isSelected ? '#ebebeb' : '#fff'">
         <div class="task-list-item__wrapper--start">
@@ -8,11 +8,11 @@
             <span class="task-list-item__priority">
                 <mat-icon [ngClass]="task.priority | priorityIconClass">{{task.priority | priorityIcon}}</mat-icon>
             </span>
-            <span class="task-list-item__id">{{task.id}}</span>
+            <a [routerLink]="['/task', task.id]"><span class="task-list-item__id">{{task.id}}</span></a>
             <span class="task-list-item__summary">{{task.summary}}</span>
 
         </div>
         <div class="task-list-item__wrapper--end">
             <p>label</p>
         </div>
-</a>
+</div>

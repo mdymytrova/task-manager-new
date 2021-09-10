@@ -1,20 +1,9 @@
-.tasks-container {
-    margin: .5rem;
-    display: flex;
+.drawer-container {
+    height: 100%;
+    padding: 1rem;
 
-    .task-list {
-        flex-grow: 1;
-        margin-right: 10px;
-    }
-
-    .task-details {
-        width: 500px;
-    }
-
-    .task-create {
-        position: absolute;
-        background: #fff;
-        padding: 20px;
-        border: 1px solid;
+    &__preview {
+        min-width: 25vw;
+        padding: 1rem;
     }
 }
