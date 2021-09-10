@@ -4,8 +4,7 @@
     <p>Created: {{task.createdOn | date}}</p>
     <p>{{task.description}}</p>
 
-    <button type="button" *ngIf="mode === 'embedded'" mat-raised-button [routerLink]="['/tasks', {outlets: {'edit': [task.id]}}]">Edit</button>
-    <button type="button" *ngIf="mode === 'standalone'" mat-raised-button [routerLink]="['', {outlets: {'standalone-edit': ['task', task.id]}}]">Edit</button>
+    <button type="button" mat-raised-button (click)="openEdit()">Edit</button>
     <button type="button" mat-raised-button color="warn" (click)="deleteTask()">Delete</button>
     <button type="button" *ngIf="mode === 'embedded'" mat-raised-button [routerLink]="['/task', task.id]">Go to task</button>
     <button type="button" *ngIf="mode === 'standalone'" mat-raised-button [routerLink]="['/tasks', task.id]">Back</button>

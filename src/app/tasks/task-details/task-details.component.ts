@@ -37,14 +37,23 @@ export class TaskDetailsComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   public deleteTask() {
-    this.router.navigate(['/tasks']);
     this.tasksDataService.updateTasks(TaskEventType.DELETE, this.task);
     this.tasksEventService.onTaskListUpdate.next({
       eventType: TaskEventType.DELETE
     });
+    this.router.navigate(['/tasks']);
+  }
+
+  public openEdit() {
+    const path = this.mode === 'embedded'
+      ? ['/tasks', { outlets: { 'edit': [this.task.id] } }]
+      : ['', { outlets: { 'standalone-edit': ['task', this.task.id] } }];
+    this.router.navigate(path);
   }
 
   private taskEventHandler = (event: TaskEvent<ITask> | TaskEvent<ITask[]>) => {
-    this.task = this.tasksDataService.getTaskById(this.task.id);
+    if (event.eventType === TaskEventType.UPDATE) {
+      this.task = this.tasksDataService.getTaskById(this.task.id);
+    }
   }
 }

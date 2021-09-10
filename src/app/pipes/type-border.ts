@@ -5,14 +5,10 @@ import { Priority, TaskType } from '../tasks/enums';
 export class TypeBorderPipe implements PipeTransform {
     public transform(value: Priority): string {
         const classes = {
-            [TaskType.BUG]: () => this.getClass('bug'),
-            [TaskType.TODO]: () => this.getClass('todo'),
-            default: () => this.getClass('unset')
-        }
-        return (classes[value] || classes.default)();
-    }
-
-    private getClass(className) {
-        return `task-list-item__wrapper task-list-item__wrapper--${className}`;
+            [TaskType.BUG]: 'bug',
+            [TaskType.TODO]: 'todo',
+            default: 'unset'
+        };
+        return `task-list-item__wrapper task-list-item__wrapper--${classes[value] || classes.default}`;
     }
 }

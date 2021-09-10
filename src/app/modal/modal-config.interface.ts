@@ -11,3 +11,8 @@ export interface IModalConfig {
     hideCloseButton?(): boolean
     hideDismissButton?(): boolean
 }
+
+export interface IModalDialogData<T> {
+    title: string;
+    data: T;
+}
