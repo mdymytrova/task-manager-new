@@ -1,6 +1,6 @@
 <h2 mat-dialog-title>{{title}}</h2>
 
-<mat-dialog-content [formGroup]="form">
+<mat-dialog-content [formGroup]="form" class="dialog-content--create">
   <mat-form-field>
     <mat-label>Summary</mat-label>
     <input matInput formControlName="summary" [formControl]="form.get('summary')" required>

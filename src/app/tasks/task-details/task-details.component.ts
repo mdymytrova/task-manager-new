@@ -41,13 +41,6 @@ export class TaskDetailsComponent implements OnInit, OnChanges, OnDestroy {
     this.router.navigate(['/tasks']);
   }
 
-  public openEdit() {
-    const path = this.mode === 'embedded'
-      ? ['/tasks', { outlets: { 'edit': [this.task.id] } }]
-      : ['', { outlets: { 'standalone-edit': ['task', this.task.id] } }];
-    this.router.navigate(path);
-  }
-
   private taskEventHandler = (event: TaskEvent<ITask> | TaskEvent<ITask[]>) => {
     if (event.eventType === TaskEventType.UPDATE) {
       this.tasksDataService.getTaskById(this.task.id).subscribe(task => {

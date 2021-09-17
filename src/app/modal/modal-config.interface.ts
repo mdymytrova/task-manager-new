@@ -13,6 +13,7 @@ export interface IModalConfig {
 }
 
 export interface IModalDialogData<T> {
-    title: string;
     data: T;
+    panelClass: string[],
+    disableClose: boolean
 }

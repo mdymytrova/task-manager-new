@@ -1,0 +1,31 @@
+<h2 mat-dialog-title>Sign In</h2>
+<mat-dialog-content [formGroup]="form" class="dialog-content--auth">
+  <mat-form-field appearance="fill">
+    <mat-label>Email</mat-label>
+    <input matInput formControlName="email" [formControl]="form.get('email')" required>
+    <mat-error *ngIf="form.get('email').invalid">Please enter a valid email</mat-error>
+  </mat-form-field>
+  <mat-form-field appearance="fill">
+    <mat-label>Password</mat-label>
+    <input matInput [type]="hidePassword ? 'password' : 'text'" formControlName="password" [formControl]="form.get('password')" required>
+    <button mat-icon-button matSuffix (click)="hidePassword = !hidePassword" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hidePassword">
+      <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+    </button>
+    <mat-error *ngIf="form.get('password').hasError('required')">Please enter a password</mat-error>
+    <mat-error *ngIf="form.get('password').hasError('minlength')">Password must be at least 6 characters long</mat-error>
+  </mat-form-field>
+</mat-dialog-content>
+
+<mat-card>
+  <p *ngIf="errorMessage">{{ errorMessage }}</p>
+  <mat-checkbox
+    [checked]="isSignUpMode"
+    (change)="isSignUpMode = $event.checked">
+      {{ isSignUpMode ? 'Create new user account' : 'Check to create new user account'}}
+  </mat-checkbox>
+</mat-card>
+
+<mat-dialog-actions align="center">
+  <button type="submit" mat-raised-button color="primary" (click)="signIn()">{{ isSignUpMode ? 'Sign Up' : 'Sign In' }}</button>
+  <button mat-raised-button mat-dialog-close>Close</button>
+</mat-dialog-actions>

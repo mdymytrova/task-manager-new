@@ -28,11 +28,11 @@ export class TaskFormComponent {
         private tasksDataService: TasksDataService,
         private taskDataService: TaskDataService,
         public tasksEventService: TasksEventService,
-        @Inject(MAT_DIALOG_DATA) dialogData: IModalDialogData<ITask>
+        @Inject(MAT_DIALOG_DATA) dialogData: ITask
     ) {
-        this.title = dialogData.title;
+        this.title = dialogData && dialogData.id ? 'Edit Task' : 'New Task';
         this.task = {
-            ...dialogData.data
+            ...dialogData
         };
     }
 

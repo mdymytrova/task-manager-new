@@ -1,14 +1,21 @@
 <nav class="navbar">
-    <a class="brand" href="#">Tasks</a>
-    <ul>
-        <li (click)="pageSelectionEventHandler(headerPages.BACKLOG)" routerLink="/tasks" routerLinkActive="active"><a>Backlog</a>
-        </li>
-        <li (click)="pageSelectionEventHandler(headerPages.DASHBOARD)" routerLink="/dashboard" routerLinkActive="active">
-            <a>Dashboard</a>
-        </li>
-        <li (click)="pageSelectionEventHandler(headerPages.SEARCH)" routerLink="/search" routerLinkActive="active">
-            <a>Search</a>
-        </li>
-        <button type="button" mat-raised-button [routerLink]="[{outlets: {'create': ['task']}}]" routerLinkActive="active">Create</button>
-    </ul>
+    <div class="navbar--right">
+        <a class="brand" routerLink="/tasks">Tasks</a>
+        <ul>
+            <li *ngIf="isAuthenticated" (click)="pageSelectionEventHandler(headerPages.BACKLOG)" routerLink="/tasks" routerLinkActive="active"><a>Backlog</a>
+            </li>
+            <li (click)="pageSelectionEventHandler(headerPages.DASHBOARD)" routerLink="/dashboard" routerLinkActive="active">
+                <a>Dashboard</a>
+            </li>
+            <li (click)="pageSelectionEventHandler(headerPages.SEARCH)" routerLink="/search" routerLinkActive="active">
+                <a>Search</a>
+            </li>
+        </ul>
+        <button *ngIf="isAuthenticated" type="button" mat-raised-button [routerLink]="[{outlets: {'modal': ['create']}}]" routerLinkActive="active">Create</button>
+    </div>
+    <div class="navbar--left">
+        <span *ngIf="username" class="navbar__username">{{ username }}</span>
+        <button *ngIf="!isAuthenticated" type="button" mat-raised-button [routerLink]="[{outlets: {'modal': ['signin']}}]" routerLinkActive="active">Sign In</button>
+        <button *ngIf="isAuthenticated" type="button" mat-raised-button (click)="onSignOut()">Sign Out</button>
+    </div>
 </nav>
