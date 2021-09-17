@@ -32,13 +32,7 @@ export class TasksComponent implements OnInit, OnChanges, OnDestroy {
     public ngOnInit(): void {
         this.pageSelectionSubscription = this.pageSelectionEventService.onPageSelect.subscribe(this.pageSelectionEventHander);
         this.taskEventSubscription = this.tasksEventService.onTaskListUpdate.subscribe(this.taskEventHandler);
-        this.taskList = this.tasksDataService.getTasks();
-        if (this.route.firstChild) {
-            this.route.firstChild.params
-                .subscribe((params: Params) => {
-                    this.previewOpen = !!params.id;
-            });
-        }
+        this.setTasks();
     }
 
     public ngOnDestroy() {
@@ -51,6 +45,12 @@ export class TasksComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     private taskEventHandler = (event: TaskEvent<ITask> | TaskEvent<ITask[]>) => {
-        this.taskList = this.tasksDataService.getTasks();
+        this.setTasks();
+    }
+
+    private setTasks() {
+        this.tasksDataService.getTasks().subscribe((tasks) => {
+            this.taskList = tasks;
+        });
     }
 }

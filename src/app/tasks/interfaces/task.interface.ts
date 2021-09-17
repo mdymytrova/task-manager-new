@@ -8,6 +8,7 @@ export interface ITaskBasic {
     status: Status;
     type: TaskType;
     priority: Priority;
+    catalogId?: string;
 }
 export interface ITask extends ITaskBasic {
     reporter?: string;

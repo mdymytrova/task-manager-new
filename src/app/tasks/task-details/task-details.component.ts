@@ -25,10 +25,10 @@ export class TaskDetailsComponent implements OnInit, OnChanges, OnDestroy {
   public ngOnInit(): void {
     this.taskEventSubscription = this.tasksEventService.onTaskListUpdate.subscribe(this.taskEventHandler);
     this.route.params
-      .subscribe((params: Params) => {
-        this.task = this.tasksDataService.getTaskById(params.id);
+      .subscribe(() => {
+        this.task = this.route.snapshot.data['task'];
       });
-
+    
     this.mode = this.route.snapshot.data['mode'];
   }
 
@@ -38,9 +38,6 @@ export class TaskDetailsComponent implements OnInit, OnChanges, OnDestroy {
 
   public deleteTask() {
     this.tasksDataService.updateTasks(TaskEventType.DELETE, this.task);
-    this.tasksEventService.onTaskListUpdate.next({
-      eventType: TaskEventType.DELETE
-    });
     this.router.navigate(['/tasks']);
   }
 
@@ -53,7 +50,9 @@ export class TaskDetailsComponent implements OnInit, OnChanges, OnDestroy {
 
   private taskEventHandler = (event: TaskEvent<ITask> | TaskEvent<ITask[]>) => {
     if (event.eventType === TaskEventType.UPDATE) {
-      this.task = this.tasksDataService.getTaskById(this.task.id);
+      this.tasksDataService.getTaskById(this.task.id).subscribe(task => {
+        this.task = task;
+      });
     }
   }
 }

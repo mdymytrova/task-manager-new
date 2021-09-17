@@ -26,6 +26,7 @@ export class TaskListComponent implements OnInit {
       this.router.navigate(['/tasks']);
     } else {
       this.selectedTaskId = taskId;
+      this.router.navigate(['/tasks', taskId]);
     }
   }
 }
