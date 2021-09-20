@@ -1,5 +1,7 @@
-import { Component, OnChanges, OnInit, OnDestroy, SimpleChanges } from '@angular/core';
+import { Component, OnChanges, OnInit, OnDestroy, SimpleChanges, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
+import { ActivatedRoute, Params } from '@angular/router';
+import { MatSidenav } from '@angular/material/sidenav';
 
 import { ITask, TaskEvent } from './interfaces';
 import { HeaderPage } from './enums';
@@ -15,12 +17,15 @@ import { TasksDataService } from '../services/tasks-data.service';
     styleUrls: ['./tasks.component.scss']
 })
 export class TasksComponent implements OnInit, OnChanges, OnDestroy {
+    @ViewChild('drawer') drawer: MatSidenav;
+
     public selectedPage: HeaderPage;
     public taskList: ITask[];
     private pageSelectionSubscription: Subscription;
     private taskEventSubscription: Subscription;
+    public previewOpen = false;
 
-    constructor(private tasksDataService: TasksDataService, private tasksEventService: TasksEventService, private pageSelectionEventService: PageSelectionEventService) {}
+    constructor(private route: ActivatedRoute, private tasksDataService: TasksDataService, private tasksEventService: TasksEventService, private pageSelectionEventService: PageSelectionEventService) {}
 
     public ngOnChanges(changes: SimpleChanges): void { }
 
@@ -28,6 +33,12 @@ export class TasksComponent implements OnInit, OnChanges, OnDestroy {
         this.pageSelectionSubscription = this.pageSelectionEventService.onPageSelect.subscribe(this.pageSelectionEventHander);
         this.taskEventSubscription = this.tasksEventService.onTaskListUpdate.subscribe(this.taskEventHandler);
         this.taskList = this.tasksDataService.getTasks();
+        if (this.route.firstChild) {
+            this.route.firstChild.params
+                .subscribe((params: Params) => {
+                    this.previewOpen = !!params.id;
+            });
+        }
     }
 
     public ngOnDestroy() {

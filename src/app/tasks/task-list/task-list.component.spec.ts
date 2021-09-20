@@ -25,7 +25,8 @@ describe('TaskListComponent', () => {
         TaskStatusPipe,
         PriorityIconPipe,
         PriorityIconClassPipe
-      ]
+      ],
+      providers: []
     })
     .compileComponents();
   });
