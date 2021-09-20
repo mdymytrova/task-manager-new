@@ -1,5 +1,5 @@
 import { Component, Inject } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef, MatDialog } from '@angular/material/dialog';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import { ITask } from '../interfaces';
@@ -7,7 +7,7 @@ import { Priority, Status, TaskEventType, TaskType } from '../enums';
 import { TasksDataService } from '../../services/tasks-data.service';
 import { TasksEventService } from '../../services/tasks-event.service';
 import { TaskDataService } from '../services/task-data.service';
-import { IModalDialogData } from '../../modal/modal-config.interface';
+import { ErrorAlert } from '../../modal/error-alert/error-alert.component';
 
 @Component({
     selector: 'modal',
@@ -28,6 +28,7 @@ export class TaskFormComponent {
         private tasksDataService: TasksDataService,
         private taskDataService: TaskDataService,
         public tasksEventService: TasksEventService,
+        private dialog: MatDialog,
         @Inject(MAT_DIALOG_DATA) dialogData: ITask
     ) {
         this.title = dialogData && dialogData.id ? 'Edit Task' : 'New Task';
@@ -57,14 +58,17 @@ export class TaskFormComponent {
             const eventType = this.task.id ? TaskEventType.UPDATE : TaskEventType.CREATE;
             const taskToSave: ITask = {
                 ...this.form.value,
-                catalogId: this.task.catalogId || `TIS-${this.tasksDataService.getTasksNumber()}`,
                 createdOn: this.task.createdOn || new Date(),
             };
             if (this.task.id) {
                 taskToSave.id = this.task.id;
             }
-            this.tasksDataService.updateTasks(eventType, taskToSave);
-            this.dialogRef.close(taskToSave);
+            this.tasksDataService.updateTasks(eventType, taskToSave).subscribe(response => {
+                this.tasksEventService.onTaskListUpdate.next({ eventType });
+                this.dialogRef.close(taskToSave);
+            }, error => {
+                this.dialog.open(ErrorAlert, { data: error });
+            });
         }
     }
 

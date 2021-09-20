@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators'; 
+import { Observable, throwError } from 'rxjs';
+import { catchError, map } from 'rxjs/operators'; 
 
 import { TaskEventType } from '../tasks/enums';
 import { ITask } from '../tasks/interfaces';
@@ -11,13 +11,11 @@ interface ITasksDataService {
     getTasks: () => Observable<ITask[]>;
     getTaskById: (id: string) => Observable<ITask>;
     updateTasks: (eventType: TaskEventType, updatedTask: ITask) => void;
-    getTasksNumber: () => number;
 }
 
 @Injectable()
 export class TasksDataService implements ITasksDataService {
     private url = 'https://md-task-manager-default-rtdb.firebaseio.com/tasks';
-    private tasksNumber = 1;
 
     constructor(private http: HttpClient, private tasksEventService: TasksEventService) {}
 
@@ -29,9 +27,6 @@ export class TasksDataService implements ITasksDataService {
                     ...responseData[key],
                     id: key
                 });
-            }
-            if (tasks.length) {
-                this.tasksNumber = tasks.length + 1;
             }
             return tasks;
         }));
@@ -46,45 +41,33 @@ export class TasksDataService implements ITasksDataService {
         }));
     }
 
-    public getTasksNumber() {
-        return this.tasksNumber;
-    }
-
     public updateTasks(eventType: TaskEventType, updatedTask: ITask) {
         const taskListUpdates = {
             [TaskEventType.CREATE]: () => this.createTask(updatedTask),
             [TaskEventType.UPDATE]: () => this.updateTask(updatedTask),
             [TaskEventType.DELETE]: () => this.deleteTask(updatedTask)
         }
-        taskListUpdates[eventType]();
+        return taskListUpdates[eventType]();
     }
 
-    private createTask(task: ITask) {
-        this.http.post(`${this.url}.json`, task)
-            .subscribe(response => {
-                this.tasksEventService.onTaskListUpdate.next({
-                    eventType: TaskEventType.CREATE
-                });
-                this.tasksNumber++;
-            });
+    public createTask(task?: ITask) {
+        return this.http.post(`${this.url}.json`, task)
+            .pipe(catchError((errorResponse) => {
+                return throwError(errorResponse?.error?.error || 'An error occured.');
+            }));
     }
 
     private updateTask(task: ITask) {
-        this.http.put(`${this.url}/${task.id}.json`, task)
-            .subscribe(response => {
-                this.tasksEventService.onTaskListUpdate.next({
-                    eventType: TaskEventType.UPDATE
-                });
-            });
+        return this.http.put(`${this.url}/${task.id}.json`, task)
+            .pipe(catchError((errorResponse) => {
+                return throwError(errorResponse?.error?.error || 'An error occured.');
+            }));
     }
 
     private deleteTask(task: ITask) {
-        this.http.delete(`${this.url}/${task.id}.json`)
-            .subscribe(response => {
-                this.tasksEventService.onTaskListUpdate.next({
-                    eventType: TaskEventType.DELETE
-                });
-                this.tasksNumber--;
-            });
+        return this.http.delete(`${this.url}/${task.id}.json`)
+            .pipe(catchError((errorResponse) => {
+                return throwError(errorResponse?.error?.error || 'An error occured.');
+            }));
     }
 }

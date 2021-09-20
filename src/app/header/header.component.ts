@@ -29,7 +29,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
     }
 
     public ngOnDestroy() {
-        this.userSignInSubscription.unsubscribe()
+        if (this.userSignInSubscription) {
+            this.userSignInSubscription.unsubscribe();
+        }
     }
 
     public pageSelectionEventHandler = (selectedPage: HeaderPage) => {

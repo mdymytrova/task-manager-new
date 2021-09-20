@@ -1,11 +1,23 @@
 <div class="task-details__wrapper" *ngIf="task">
     <h1>{{task.summary}}</h1>
-    <h4>Priority: {{task.priority | titlecase}}</h4>
-    <p>Created: {{task.createdOn | date}}</p>
-    <p>{{task.description}}</p>
 
-    <button type="button" mat-raised-button [routerLink]="['', { outlets: { 'modal': ['task', task.id] } }]">Edit</button>
-    <button type="button" mat-raised-button color="warn" (click)="deleteTask()">Delete</button>
-    <button type="button" *ngIf="mode === 'embedded'" mat-raised-button [routerLink]="['/task', task.id]">Go to task</button>
-    <button type="button" *ngIf="mode === 'standalone'" mat-raised-button [routerLink]="['/tasks', task.id]">Back</button>
+    <div class="task-details__toolbar">
+        <button type="button" mat-raised-button [routerLink]="['', { outlets: { 'modal': ['task', task.id] } }]">Edit</button>
+        <button type="button" mat-raised-button color="warn" (click)="deleteTask()">Delete</button>
+        <button type="button" *ngIf="mode === 'embedded'" mat-raised-button [routerLink]="['/task', task.id]">Go to task</button>
+        <button type="button" *ngIf="mode === 'standalone'" mat-raised-button [routerLink]="['/tasks', task.id]">Back</button>
+    </div>
+
+    <section>
+        <div class="task-details__section-title">Details</div>
+        <p>Type: {{task.type | titlecase}}</p>
+        <p>Priority: {{task.priority | titlecase}}</p>
+        <p>Status: {{task.status | taskStatus}}</p>
+        <p>Created: {{task.createdOn | date: 'medium'}}</p>
+    </section>
+
+    <section>
+        <div class="task-details__section-title">Description</div>
+        <p [innerText]="task.description"></p>
+    </section>
 </div>

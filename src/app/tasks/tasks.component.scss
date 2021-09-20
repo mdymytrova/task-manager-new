@@ -1,9 +1,13 @@
 .drawer-container {
-    height: 100%;
+    height: calc(100vh - 52px);
     padding: 1rem;
 
+    &__content {
+        min-width: 72vw;
+    }
+
     &__preview {
-        min-width: 25vw;
+        width: 25vw;
         padding: 1rem;
     }
 }

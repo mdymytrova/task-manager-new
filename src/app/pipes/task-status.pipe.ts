@@ -6,7 +6,7 @@ export class TaskStatusPipe implements PipeTransform {
     public transform(value: Status): string {
         const values = {
             [Status.ACCEPTED]: 'Accepted',
-            [Status.CORE_REVIEW]: 'Code review',
+            [Status.CODE_REVIEW]: 'Code review',
             [Status.IN_DEVELOPMENT]: 'In development',
             [Status.IN_TEST]: 'In Test',
             [Status.NEW]: 'New',

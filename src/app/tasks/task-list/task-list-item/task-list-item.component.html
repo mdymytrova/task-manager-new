@@ -2,17 +2,16 @@
     [ngClass]="task.type | typeBorder"
     [style.background-color]="isSelected ? '#ebebeb' : '#fff'">
         <div class="task-list-item__wrapper--start">
-            <span class="task-list-item__type">
+            <span class="task-list-item__type" matTooltip="{{ task.type | titlecase }}">
                 <mat-icon *ngIf="task.type" [ngClass]="task.type | typeIconClass">{{task.type | typeIcon}}</mat-icon>
             </span>
-            <span class="task-list-item__priority">
+            <span class="task-list-item__priority" matTooltip="{{ task.priority | titlecase }}">
                 <mat-icon [ngClass]="task.priority | priorityIconClass">{{task.priority | priorityIcon}}</mat-icon>
             </span>
-            <a [routerLink]="['/task', task.id]"><span class="task-list-item__id">{{task.catalogId}}</span></a>
-            <span class="task-list-item__summary">{{task.summary}}</span>
+            <a [routerLink]="['/task', task.id]"><span class="task-list-item__summary">{{task.summary}}</span></a>
 
         </div>
         <div class="task-list-item__wrapper--end">
-            <p>label</p>
+            <p>{{ task.status | taskStatus }}</p>
         </div>
 </div>

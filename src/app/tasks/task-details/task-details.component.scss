@@ -6,4 +6,16 @@
         border-radius: .1rem;
         padding: 1rem;
     }
+
+    &__toolbar {
+        margin: 20px 0;
+
+        button {
+            margin-right: 10px;
+        }
+    }
+
+    &__section-title {
+        font-weight: bolder;
+    }
 }
