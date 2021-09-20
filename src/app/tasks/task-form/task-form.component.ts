@@ -28,22 +28,25 @@ export class TaskFormComponent {
         private tasksDataService: TasksDataService,
         private taskDataService: TaskDataService,
         public tasksEventService: TasksEventService,
-        @Inject(MAT_DIALOG_DATA) dialogData: IModalDialogData<ITask>
+        @Inject(MAT_DIALOG_DATA) dialogData: ITask
     ) {
-        this.title = dialogData.title;
+        this.title = dialogData && dialogData.id ? 'Edit Task' : 'New Task';
         this.task = {
-            ...dialogData.data
+            ...dialogData
         };
     }
 
     public ngOnInit() {
-        this.form = this.formBuilder.group({
-            summary: [this.task.summary || '', Validators.required],
-            description: this.task.description || '',
-            type: this.task.type || null,
-            status: this.task.status || Status.NEW,
-            priority: this.task.priority || Priority.MAJOR
-        });
+        this.initForm();
+        if (this.task.id) {
+            this.tasksDataService.getTaskById(this.task.id).subscribe(task => {
+                this.task = {
+                    ...this.task,
+                    ...task
+                };
+                this.patchForm(this.task);
+            });
+        }
         this.priorityData = this.taskDataService.getPriorities();
         this.typeData = this.taskDataService.getTypes();
         this.statusData = this.taskDataService.getStatuses();
@@ -54,14 +57,30 @@ export class TaskFormComponent {
             const eventType = this.task.id ? TaskEventType.UPDATE : TaskEventType.CREATE;
             const taskToSave: ITask = {
                 ...this.form.value,
-                id: this.task.id || `TIS-${this.tasksDataService.getTasksLength() + 1}`,
+                catalogId: this.task.catalogId || `TIS-${this.tasksDataService.getTasksNumber()}`,
                 createdOn: this.task.createdOn || new Date(),
             };
+            if (this.task.id) {
+                taskToSave.id = this.task.id;
+            }
             this.tasksDataService.updateTasks(eventType, taskToSave);
-            this.tasksEventService.onTaskListUpdate.next({
-                eventType: eventType
-            });
             this.dialogRef.close(taskToSave);
         }
+    }
+
+    private initForm() {
+        this.form = this.formBuilder.group({
+            summary: ['', Validators.required],
+            description: '',
+            type: null,
+            status: Status.NEW,
+            priority: Priority.MAJOR
+        });
+    }
+
+    private patchForm(task: ITask) {
+        this.form.patchValue({
+            ...task
+        });
     }
 }

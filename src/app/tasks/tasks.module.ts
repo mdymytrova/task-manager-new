@@ -5,6 +5,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TasksComponent } from './tasks.component';
 import { TaskDetailsComponent } from './task-details/task-details.component';
 import { TaskListComponent } from './task-list/task-list.component';
+import { TaskFormModalComponent } from './task-form/task-form-modal.component';
 import { TaskListItemComponent } from './task-list/task-list-item/task-list-item.component';
 import { PipesModule } from '../pipes/pipes.module';
 import { ModalModule } from '../modal/modal.module';
@@ -19,7 +20,8 @@ import { TaskDataService } from './services/task-data.service';
     TaskListComponent,
     TaskListItemComponent,
     TaskDetailsComponent,
-    TaskFormComponent
+    TaskFormComponent,
+    TaskFormModalComponent
   ],
   imports: [
     CommonModule,

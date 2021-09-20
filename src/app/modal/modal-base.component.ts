@@ -8,8 +8,8 @@ export class ModalBaseComponent {
 
     constructor(public matDialog: MatDialog) { }
 
-    public openDialog(dialogComponent, dialogData, onCloseCallback) {
-        const dialogConfig = this.getDialogConfig(dialogData);
+    public openDialog(dialogComponent, customConfig, onCloseCallback) {
+        const dialogConfig = this.getDialogConfig(customConfig);
         
         this.matDialog
             .open(dialogComponent, dialogConfig)
@@ -17,12 +17,11 @@ export class ModalBaseComponent {
             .subscribe(onCloseCallback);
     }
 
-    private getDialogConfig(dialogData) {
+    private getDialogConfig(customConfig) {
         const dialogConfig = new MatDialogConfig();
-        dialogConfig.disableClose = true;
-        dialogConfig.autoFocus = true;
-        dialogConfig.data = dialogData;
-        dialogConfig.panelClass = 'task-modal-form';
-        return dialogConfig;
+        return {
+            ...dialogConfig,
+            ...customConfig
+        };
     }
 }

@@ -3,41 +3,51 @@
 .navbar {
     background-color: $blue-header;
     display: flex;
+    flex-direction: row;
+    justify-content: space-between;
     align-items: center;
     padding: .5rem;
 
-    ul {
-        list-style-type: none;
-        margin: 0;
-        padding: 0;
+    &--right {
         display: flex;
-        align-items:center;
-
-        li {
-            margin-right: 20px;
-            cursor: pointer;
-            a {
-                display: block;
-            }
-
-            &.active {
+        ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            align-items:center;
+    
+            li {
+                margin-right: 20px;
+                cursor: pointer;
                 a {
-                    color: wheat;
+                    display: block;
+                }
+    
+                &.active {
+                    a {
+                        color: wheat;
+                    }
                 }
             }
         }
+    
+        a {
+            text-decoration: none;
+            color: $header-text;
+        }
+    
+        .brand {
+            display: block;
+            color: $header-text;
+            padding: 0 24px;
+            font-size: 24px;
+        }
     }
 
-    a {
-        text-decoration: none;
-        color: #e7e7e7;
-    }
-
-    .brand {
-        display: block;
-        color: #e7e7e7;
-        padding: 0 24px;
-        font-size: 24px;
+    &__username {
+        color: $header-text;
+        margin: 0 10px;
     }
 }
 

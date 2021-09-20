@@ -5,11 +5,12 @@ import { MaterialModule } from './material/material.module';
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './header/header.component';
 import { PageSelectionEventService } from './services/page-selection-event.service';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 describe('AppComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ MaterialModule, RouterTestingModule ],
+      imports: [ MaterialModule, RouterTestingModule, HttpClientTestingModule ],
       declarations: [ AppComponent, HeaderComponent ],
       providers: [ PageSelectionEventService ],
     }).compileComponents();

@@ -1,10 +1,7 @@
 import { NgModule } from '@angular/core';
 import { ModalBaseComponent } from './modal-base.component';
-
-import { TaskFormModalComponent } from './task-form-modal.component';
-
 @NgModule({
-  declarations: [ModalBaseComponent, TaskFormModalComponent],
+  declarations: [ModalBaseComponent],
   providers: [],
   imports: [],
   exports: []

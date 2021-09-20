@@ -1,49 +1,90 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators'; 
 
-import { TASK_LIST } from '../assets/mocks';
 import { TaskEventType } from '../tasks/enums';
 import { ITask } from '../tasks/interfaces';
-
+import { TasksEventService } from './tasks-event.service';
 
 interface ITasksDataService {
-    getTasks: () => ITask[];
-    getTasksLength: () => number;
-    getTaskById: (id: string) => ITask;
-    updateTasks: (eventType: TaskEventType, updatedTask: ITask) => ITask[];
+    getTasks: () => Observable<ITask[]>;
+    getTaskById: (id: string) => Observable<ITask>;
+    updateTasks: (eventType: TaskEventType, updatedTask: ITask) => void;
+    getTasksNumber: () => number;
 }
 
 @Injectable()
 export class TasksDataService implements ITasksDataService {
-    private tasks: ITask[] = TASK_LIST;
+    private url = 'https://md-task-manager-default-rtdb.firebaseio.com/tasks';
+    private tasksNumber = 1;
 
-    constructor() {}
+    constructor(private http: HttpClient, private tasksEventService: TasksEventService) {}
 
-    public getTasks(): ITask[] {
-        return this.tasks;
+    public getTasks(): Observable<ITask[]> {
+        return this.http.get<ITask[]>(`${this.url}.json`).pipe(map(responseData => {
+            const tasks = [];
+            for (const key in responseData) {
+                tasks.push({
+                    ...responseData[key],
+                    id: key
+                });
+            }
+            if (tasks.length) {
+                this.tasksNumber = tasks.length + 1;
+            }
+            return tasks;
+        }));
     }
 
-    public getTasksLength(): number {
-        return this.tasks.length;
+    public getTaskById(id: string): Observable<ITask> {
+        return this.http.get<ITask>(`${this.url}/${id}.json`).pipe(map((task: ITask) => {
+            return {
+                ...task, 
+                id: id
+            };
+        }));
     }
 
-    public getTaskById(id: string): ITask {
-        return this.tasks.find((task: ITask) => task.id === id);
+    public getTasksNumber() {
+        return this.tasksNumber;
     }
 
-    public updateTasks(eventType: TaskEventType, updatedTask: ITask): ITask[] {
-        this.updateTaskList(eventType, updatedTask);
-        return this.tasks;
-    }
-
-    private updateTaskList(eventType: TaskEventType, updatedTask: ITask) {
+    public updateTasks(eventType: TaskEventType, updatedTask: ITask) {
         const taskListUpdates = {
-            [TaskEventType.CREATE]: () => this.tasks.push(updatedTask),
-            [TaskEventType.UPDATE]: () => {
-                const existingTaskIndex = this.tasks.findIndex(task => task.id === updatedTask.id);
-                this.tasks[existingTaskIndex] = updatedTask;
-            },
-            [TaskEventType.DELETE]: () => this.tasks = this.tasks.filter(task => task.id !== updatedTask.id)
+            [TaskEventType.CREATE]: () => this.createTask(updatedTask),
+            [TaskEventType.UPDATE]: () => this.updateTask(updatedTask),
+            [TaskEventType.DELETE]: () => this.deleteTask(updatedTask)
         }
         taskListUpdates[eventType]();
+    }
+
+    private createTask(task: ITask) {
+        this.http.post(`${this.url}.json`, task)
+            .subscribe(response => {
+                this.tasksEventService.onTaskListUpdate.next({
+                    eventType: TaskEventType.CREATE
+                });
+                this.tasksNumber++;
+            });
+    }
+
+    private updateTask(task: ITask) {
+        this.http.put(`${this.url}/${task.id}.json`, task)
+            .subscribe(response => {
+                this.tasksEventService.onTaskListUpdate.next({
+                    eventType: TaskEventType.UPDATE
+                });
+            });
+    }
+
+    private deleteTask(task: ITask) {
+        this.http.delete(`${this.url}/${task.id}.json`)
+            .subscribe(response => {
+                this.tasksEventService.onTaskListUpdate.next({
+                    eventType: TaskEventType.DELETE
+                });
+                this.tasksNumber--;
+            });
     }
 }
