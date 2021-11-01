@@ -13,7 +13,7 @@ interface ITasksDataService {
     updateTasks: (eventType: TaskEventType, updatedTask: ITask) => void;
 }
 
-@Injectable()
+@Injectable({providedIn: 'root'})
 export class TasksDataService implements ITasksDataService {
     private url = 'https://md-task-manager-default-rtdb.firebaseio.com/tasks';
 

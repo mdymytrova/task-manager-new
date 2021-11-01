@@ -34,6 +34,6 @@ export class TaskFormModalComponent extends ModalBaseComponent implements OnInit
     }
 
     private onClose = (task) => {
-        this.router.navigate([{ outlets: { modal: null }}]);
+        this.router.navigate(['/tasks', { outlets: { modal: null }}]); // create
     }
 }

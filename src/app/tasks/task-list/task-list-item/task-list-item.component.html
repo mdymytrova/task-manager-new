@@ -8,7 +8,7 @@
             <span class="task-list-item__priority" matTooltip="{{ task.priority | titlecase }}">
                 <mat-icon [ngClass]="task.priority | priorityIconClass">{{task.priority | priorityIcon}}</mat-icon>
             </span>
-            <a [routerLink]="['/task', task.id]"><span class="task-list-item__summary">{{task.summary}}</span></a>
+            <a [routerLink]="['task', task.id]"><span class="task-list-item__summary">{{task.summary}}</span></a>
 
         </div>
         <div class="task-list-item__wrapper--end">
