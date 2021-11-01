@@ -5,6 +5,7 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { TaskDetailsComponent } from './task-details.component';
 import { TasksEventService } from '../../services/tasks-event.service';
 import { TasksDataService } from '../../services/tasks-data.service';
+import { MaterialModule } from '../../material/material.module';
 
 describe('TaskDetailsComponent', () => {
   let component: TaskDetailsComponent;
@@ -12,7 +13,7 @@ describe('TaskDetailsComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ RouterTestingModule, HttpClientTestingModule ],
+      imports: [ RouterTestingModule, HttpClientTestingModule, MaterialModule ],
       declarations: [ TaskDetailsComponent ],
       providers: [ TasksEventService, TasksDataService ]
     })

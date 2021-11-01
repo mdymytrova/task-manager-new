@@ -1,5 +1,6 @@
 import { Component, Input, OnInit, OnChanges, OnDestroy } from '@angular/core';
-import { Router, ActivatedRoute, ParamMap, Params } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
 import { Subscription } from 'rxjs';
 
 import { TaskEventType } from '../enums';
@@ -7,6 +8,7 @@ import { ITask, TaskEvent } from '../interfaces';
 
 import { TasksEventService } from '../../services/tasks-event.service';
 import { TasksDataService } from '../../services/tasks-data.service';
+import { ErrorAlert } from '../../modal/error-alert/error-alert.component';
 
 @Component({
   selector: 'app-task-details',
@@ -18,7 +20,7 @@ export class TaskDetailsComponent implements OnInit, OnChanges, OnDestroy {
   public mode: string = 'embedded';
   private taskEventSubscription: Subscription;
 
-  constructor(private tasksEventService: TasksEventService, private tasksDataService: TasksDataService, private route: ActivatedRoute, private router: Router) { }
+  constructor(private tasksEventService: TasksEventService, private tasksDataService: TasksDataService, private route: ActivatedRoute, private router: Router, private dialog: MatDialog) { }
 
   public ngOnChanges(changes): void { }
 
@@ -37,8 +39,14 @@ export class TaskDetailsComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   public deleteTask() {
-    this.tasksDataService.updateTasks(TaskEventType.DELETE, this.task);
-    this.router.navigate(['/tasks']);
+    this.tasksDataService.updateTasks(TaskEventType.DELETE, this.task).subscribe(response => {
+      this.tasksEventService.onTaskListUpdate.next({
+        eventType: TaskEventType.DELETE
+      });
+      this.router.navigate(['/tasks']);
+    }, error => {
+      this.dialog.open(ErrorAlert, { data: error });
+    });
   }
 
   private taskEventHandler = (event: TaskEvent<ITask> | TaskEvent<ITask[]>) => {

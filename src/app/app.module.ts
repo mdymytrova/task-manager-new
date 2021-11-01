@@ -48,7 +48,7 @@ import { AuthFormModalComponent } from './auth/auth-form/auth-form-modal.compone
       multi: true
     }
   ],
-  entryComponents: [TaskFormModalComponent, AuthFormModalComponent],
+  // entryComponents: [TaskFormModalComponent, AuthFormModalComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   bootstrap: [AppComponent]
 })

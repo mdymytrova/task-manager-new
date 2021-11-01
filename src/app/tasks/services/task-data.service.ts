@@ -33,7 +33,7 @@ export class TaskDataService implements ITaskDataService {
         return [
             Status.NEW,
             Status.ACCEPTED,
-            Status.CORE_REVIEW,
+            Status.CODE_REVIEW,
             Status.IN_DEVELOPMENT,
             Status.IN_TEST,
             Status.PENDING,
