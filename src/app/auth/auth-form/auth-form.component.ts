@@ -41,7 +41,7 @@ export class AuthFormComponent implements OnInit {
         if (this.form.valid) {
             const { email, password } = this.form.value;
             this.authService.signIn(email, password, this.isSignUpMode).subscribe(response => {
-                this.router.navigate(['/tasks']);
+                this.router.navigate(['']);
                 this.dialogRef.close();
             }, errorMessage => {
                 this.errorMessage = errorMessage;
