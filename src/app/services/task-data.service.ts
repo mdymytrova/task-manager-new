@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { Priority, Status, TaskType } from '../enums';
+import { Priority, Status, TaskType } from '../tasks/enums';
 
 interface ITaskDataService {
     getPriorities: () => Priority[];
@@ -8,7 +8,7 @@ interface ITaskDataService {
     getStatuses: () => Status[];
 }
 
-@Injectable()
+@Injectable({providedIn: 'root'})
 export class TaskDataService implements ITaskDataService {
     constructor() {}
 

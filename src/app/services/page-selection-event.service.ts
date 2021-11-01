@@ -3,7 +3,7 @@ import { Subject } from 'rxjs';
 
 import { HeaderPage } from "../tasks/enums";
 
-@Injectable()
+@Injectable({providedIn: 'root'})
 export class PageSelectionEventService {
   public onPageSelect = new Subject<HeaderPage>();
   public onCreate = new Subject<HeaderPage>();

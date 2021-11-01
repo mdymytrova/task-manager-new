@@ -12,11 +12,12 @@ import { ModalModule } from '../modal/modal.module';
 import { MaterialModule } from '../material/material.module';
 import { TaskRoutingModule } from './tasks-routing.module';
 import { TaskFormComponent } from './task-form/task-form.component';
-import { TaskDataService } from './services/task-data.service';
+import { TasksDrawerComponent } from './tasks-drawer/tasks-drawer.component';
 
 @NgModule({
   declarations: [
     TasksComponent,
+    TasksDrawerComponent,
     TaskListComponent,
     TaskListItemComponent,
     TaskDetailsComponent,
@@ -32,7 +33,6 @@ import { TaskDataService } from './services/task-data.service';
     MaterialModule,
     TaskRoutingModule
   ],
-  exports: [TasksComponent],
-  providers: [TaskDataService]
+  exports: [TasksComponent]
 })
 export class TasksModule { }

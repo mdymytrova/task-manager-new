@@ -6,7 +6,7 @@ import { ITask } from '../interfaces';
 import { Priority, Status, TaskEventType, TaskType } from '../enums';
 import { TasksDataService } from '../../services/tasks-data.service';
 import { TasksEventService } from '../../services/tasks-event.service';
-import { TaskDataService } from '../services/task-data.service';
+import { TaskDataService } from '../../services/task-data.service';
 import { ErrorAlert } from '../../modal/error-alert/error-alert.component';
 
 @Component({

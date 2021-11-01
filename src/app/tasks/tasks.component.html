@@ -1,16 +1,2 @@
-<mat-drawer-container class="drawer-container" autosize>
-    <mat-drawer-content class="drawer-container__content">
-        <app-task-list [taskList]="taskList"></app-task-list>
-    </mat-drawer-content>
-    <mat-drawer
-        class="drawer-container__preview"
-        #drawer
-        mode="side"
-        position="end"
-        [opened]="previewOpen">
-            <div class="task-details">
-                <router-outlet (activate)="previewOpen=true" (deactivate)="previewOpen=false"></router-outlet>
-            </div>
-    </mat-drawer>
-
-  </mat-drawer-container>
+<router-outlet></router-outlet>
+<router-outlet name="modal"></router-outlet>

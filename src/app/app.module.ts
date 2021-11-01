@@ -35,20 +35,15 @@ import { AuthFormModalComponent } from './auth/auth-form/auth-form-modal.compone
     CommonModule,
     MaterialModule,
     AuthModule,
-    TasksModule,
     AppRoutingModule
   ],
   providers: [
-    TasksDataService,
-    TasksEventService,
-    PageSelectionEventService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptorService,
       multi: true
     }
   ],
-  // entryComponents: [TaskFormModalComponent, AuthFormModalComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   bootstrap: [AppComponent]
 })
