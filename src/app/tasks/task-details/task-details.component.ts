@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, OnChanges, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { Subscription } from 'rxjs';
@@ -15,14 +15,12 @@ import { ErrorAlert } from '../../modal/error-alert/error-alert.component';
   templateUrl: './task-details.component.html',
   styleUrls: ['./task-details.component.scss']
 })
-export class TaskDetailsComponent implements OnInit, OnChanges, OnDestroy {
+export class TaskDetailsComponent implements OnInit, OnDestroy {
   public task: ITask;
   public mode: string = 'embedded';
   private taskEventSubscription: Subscription;
 
   constructor(private tasksEventService: TasksEventService, private tasksDataService: TasksDataService, private route: ActivatedRoute, private router: Router, private dialog: MatDialog) { }
-
-  public ngOnChanges(changes): void { }
 
   public ngOnInit(): void {
     this.taskEventSubscription = this.tasksEventService.onTaskListUpdate.subscribe(this.taskEventHandler);

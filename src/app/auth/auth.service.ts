@@ -1,11 +1,14 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { BehaviorSubject, Subject, throwError } from 'rxjs';
+import { Store } from '@ngrx/store';
+import { BehaviorSubject, throwError } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 
 import { environment } from '../../environments/environment';
 import { User } from './user';
+import * as fromApp from '../store/app.reducer';
+import * as AuthActions from '../auth/store/auth.actions';
 
 interface AuthResponseData {
     kind: string;
@@ -28,10 +31,10 @@ enum FB_AUTH_ERROR {
 
 @Injectable({providedIn: 'root'})
 export class AuthService {
-    public userSignIn = new BehaviorSubject<User>(null);
+    // public userSignIn = new BehaviorSubject<User>(null);
     private expirationTimer;
 
-    constructor(private http: HttpClient, private router: Router) {}
+    constructor(private http: HttpClient, private router: Router, private store: Store<fromApp.AppState>) {}
 
     public signIn(email, password, isSignUpMode) {
         const method = isSignUpMode ? 'signUp' : 'signInWithPassword';
@@ -43,15 +46,22 @@ export class AuthService {
             return throwError(this.errorMessage(errorResponse?.error?.error?.message));
         }), tap(responseData => {
             const expirationDate: Date = new Date(new Date().getTime() + +responseData.expiresIn * 1000);
-            const user = new User(responseData.email, responseData.localId, expirationDate, responseData.idToken);
+            const user = new User(responseData.idToken, responseData.localId, expirationDate, responseData.idToken);
             localStorage.setItem('userData', JSON.stringify(user));
-            this.userSignIn.next(user);
+            // this.userSignIn.next(user);
+            this.store.dispatch(new AuthActions.Login({
+                email: responseData.email,
+                localId: responseData.localId,
+                expirationDate: expirationDate,
+                idToken: responseData.idToken
+            }));
             this.autoLogout(+responseData.expiresIn * 1000);
         }));
     }
 
     public signOut() {
-        this.userSignIn.next(null);
+        // this.userSignIn.next(null);
+        this.store.dispatch(new AuthActions.Logout());
         this.router.navigate(['/signin']);
         localStorage.removeItem('userData');
         if (this.expirationTimer) {
@@ -67,7 +77,13 @@ export class AuthService {
         }
         const signedUser = new User(userData.email, userData.id, new Date(userData.tokenExpirationDate), userData._token);
         if (signedUser.token) {
-            this.userSignIn.next(signedUser);
+            // this.userSignIn.next(signedUser);
+            this.store.dispatch(new AuthActions.Login({
+                email: userData.email,
+                localId: userData.id,
+                expirationDate: new Date(userData.tokenExpirationDate),
+                idToken: userData._token
+            }));
             const expiresIn = new Date(userData.tokenExpirationDate).getTime() - new Date().getTime();
             this.autoLogout(expiresIn);
         }
