@@ -5,6 +5,7 @@ import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { AuthService } from '../auth/auth.service';
+import { logoutSuccess } from '../auth/store/auth.actions';
 import * as fromApp from '../store/app.reducer';
 
 @Component({
@@ -18,7 +19,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     public username: string;
     private userSignInSubscription: Subscription;
 
-    constructor(public matDialog: MatDialog, private authService: AuthService, private router: Router, private store: Store<fromApp.AppState>) { }
+    constructor(public matDialog: MatDialog, private store: Store<fromApp.AppState>) { }
 
     public ngOnInit(): void {
         this.isAuthenticated = false;
@@ -33,7 +34,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
     public onSignOut() {
         this.username = null;
-        this.authService.signOut();
+        this.store.dispatch(logoutSuccess());
     }
 
     private onUserSignIn = (user) => {

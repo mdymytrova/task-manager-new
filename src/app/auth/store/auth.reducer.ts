@@ -1,28 +1,44 @@
+import { createReducer, on } from '@ngrx/store';
 import { User } from '../user';
-import * as AuthActions from './auth.actions';
+import { login, loginFail, loginSuccess, logoutSuccess } from './auth.actions';
 
 export interface IAuthState {
     user: User;
+    authError: string;
 }
 
 const initialState: IAuthState = {
-    user: null
+    user: null,
+    authError: null
 };
 
-export function authReducer(state: IAuthState = initialState, action: AuthActions.all) {
-    switch (action.type) {
-        case AuthActions.LOGIN_ACTION:
-            const user = new User(action.payload.email, action.payload.localId, action.payload.expirationDate, action.payload.idToken);
-            return {
-                ...state,
-                user
-            };
-        case AuthActions.LOGOUT_ACTION:
-            return {
-                ...state,
-                user: null
-            };
-        default:
-            return state;
-    }
-}
+export const authReducer = createReducer(
+    initialState,
+    on(login, (state, payload) => {
+        return {
+            ...state,
+            authError: null
+        };
+    }),
+    on(loginSuccess, (state, { payload }) => {
+        return {
+            ...state,
+            user: new User(payload.email, payload.localId, payload.expirationDate, payload.idToken),
+            authError: null
+        };
+    }),
+    on(loginFail, (state, { payload }) => {
+        return {
+            ...state,
+            user: null,
+            authError: payload
+        };
+    }),
+    on(logoutSuccess, (state) => {
+        return {
+            ...state,
+            user: null,
+            authError: null
+        };
+    })
+);

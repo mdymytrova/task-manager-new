@@ -4,6 +4,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { StoreModule } from '@ngrx/store';
+import { EffectsModule } from '@ngrx/effects';
 
 import { AppRoutingModule } from './router/app-routing.module';
 import { MaterialModule } from './material/material.module';
@@ -16,6 +17,7 @@ import { SearchComponent } from './search/search.component';
 
 import { AuthInterceptorService } from './auth/auth-interceptor.service';
 import * as fromApp from './store/app.reducer';
+import { AuthEffects } from './auth/store/auth.effects';
 
 @NgModule({
   declarations: [
@@ -30,6 +32,7 @@ import * as fromApp from './store/app.reducer';
     HttpClientModule,
     CommonModule,
     StoreModule.forRoot(fromApp.appReducer),
+    EffectsModule.forRoot([AuthEffects]),
     MaterialModule,
     AuthModule,
     AppRoutingModule

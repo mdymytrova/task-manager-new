@@ -1,4 +1,4 @@
-import { Action } from '@ngrx/store';
+import { createAction, props } from '@ngrx/store';
 
 export interface IAuthUser {
     email: string,
@@ -7,16 +7,10 @@ export interface IAuthUser {
     idToken: string
 };
 
-export const LOGIN_ACTION = 'LOGIN';
-export const LOGOUT_ACTION = 'LOGOUT';
+export const login = createAction('[Auth] Login', props<{email: string; password: string; method: string;}>());
+export const loginSuccess = createAction('[Auth] Login Success', props<{payload: IAuthUser}>());
+export const loginFail = createAction('[Auth] Login Fail', props<{payload: string}>());
 
-export class Login implements Action {
-    readonly type = LOGIN_ACTION;
-    constructor(public payload: IAuthUser) { }
-}
+export const logoutSuccess = createAction('[Auth] Logout Success');
 
-export class Logout implements Action {
-    readonly type = LOGOUT_ACTION;
-}
-
-export type all = Login | Logout;
+export const authAutoLogin = createAction('[Auth] Auto Login');
