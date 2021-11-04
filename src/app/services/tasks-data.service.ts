@@ -17,7 +17,7 @@ interface ITasksDataService {
 export class TasksDataService implements ITasksDataService {
     private url = 'https://md-task-manager-default-rtdb.firebaseio.com/tasks';
 
-    constructor(private http: HttpClient, private tasksEventService: TasksEventService) {}
+    constructor(private http: HttpClient) {}
 
     public getTasks(): Observable<ITask[]> {
         return this.http.get<ITask[]>(`${this.url}.json`).pipe(map(responseData => {

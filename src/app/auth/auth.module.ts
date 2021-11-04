@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule, Routes } from '@angular/router';
+import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { MaterialModule } from '../material/material.module';
@@ -19,8 +19,6 @@ import { AuthFormModalComponent } from './auth-form/auth-form-modal.component';
     FormsModule,
     MaterialModule,
     RouterModule
-  ],
-  exports: [],
-  providers: []
+  ]
 })
 export class AuthModule { }

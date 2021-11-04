@@ -1,11 +1,12 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
+import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { AuthService } from '../auth/auth.service';
-
-import { PageSelectionEventService } from '../services/page-selection-event.service';
-import { HeaderPage } from '../tasks/enums';
+import { logoutSuccess } from '../auth/store/auth.actions';
+import * as fromApp from '../store/app.reducer';
 
 @Component({
     selector: 'app-header',
@@ -14,18 +15,15 @@ import { HeaderPage } from '../tasks/enums';
 })
 
 export class HeaderComponent implements OnInit, OnDestroy {
-    public headerPages = HeaderPage;
-    public selectedPage: HeaderPage;
     public isAuthenticated: boolean;
     public username: string;
     private userSignInSubscription: Subscription;
 
-    constructor(private pageSelectionEventService: PageSelectionEventService, public matDialog: MatDialog, private authService: AuthService, private router: Router) { }
+    constructor(public matDialog: MatDialog, private store: Store<fromApp.AppState>) { }
 
     public ngOnInit(): void {
         this.isAuthenticated = false;
-        this.userSignInSubscription = this.authService.userSignIn.subscribe(this.onUserSignIn);
-        this.pageSelectionEventService.onPageSelect.next(HeaderPage.BACKLOG);
+        this.userSignInSubscription = this.store.select('auth').pipe(map(authState => authState.user)).subscribe(this.onUserSignIn);
     }
 
     public ngOnDestroy() {
@@ -34,14 +32,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
         }
     }
 
-    public pageSelectionEventHandler = (selectedPage: HeaderPage) => {
-        this.selectedPage = selectedPage;
-        this.pageSelectionEventService.onPageSelect.next(selectedPage);
-    }
-
     public onSignOut() {
         this.username = null;
-        this.authService.signOut();
+        this.store.dispatch(logoutSuccess());
     }
 
     private onUserSignIn = (user) => {
