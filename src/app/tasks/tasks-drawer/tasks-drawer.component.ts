@@ -1,12 +1,12 @@
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { map, Subscription } from 'rxjs';
 import { MatSidenav } from '@angular/material/sidenav';
+import { Store } from '@ngrx/store';
 
-import { ITask, TaskEvent } from '../interfaces';
+import { ITask } from '../interfaces';
 
-import { TasksEventService } from '../../services/tasks-event.service';
-import { TasksDataService } from '../../services/tasks-data.service';
-
+import * as fromApp from '../../store/app.reducer';
+import { loadTasksRequest } from '../store/tasks.actions';
 
 @Component({
     selector: 'app-tasks-drawer',
@@ -17,27 +17,20 @@ export class TasksDrawerComponent implements OnInit, OnDestroy {
     @ViewChild('drawer') drawer: MatSidenav;
 
     public taskList: ITask[];
-    private taskEventSubscription: Subscription;
     public previewOpen = false;
+    private storeSubscription: Subscription;
 
-    constructor(private tasksDataService: TasksDataService, private tasksEventService: TasksEventService) {}
+    constructor(private store: Store<fromApp.AppState>) {}
 
     public ngOnInit(): void {
-        this.taskEventSubscription = this.tasksEventService.onTaskListUpdate.subscribe(this.taskEventHandler);
-        this.setTasks();
-    }
-
-    public ngOnDestroy() {
-        this.taskEventSubscription.unsubscribe()
-    }
-
-    private taskEventHandler = (event: TaskEvent<ITask> | TaskEvent<ITask[]>) => {
-        this.setTasks();
-    }
-
-    private setTasks() {
-        this.tasksDataService.getTasks().subscribe((tasks) => {
+        this.store.dispatch(loadTasksRequest());
+        this.storeSubscription = this.store.select('tasks').pipe(map(tasksState => tasksState.tasks)).subscribe((tasks) => {
             this.taskList = tasks;
         });
     }
+
+    public ngOnDestroy() {
+        this.storeSubscription.unsubscribe();
+    }
+
 }

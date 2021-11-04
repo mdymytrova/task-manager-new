@@ -16,13 +16,31 @@ const appRoutes: Routes = [
     children: [
       {
         path: '', component: TasksDrawerComponent,
-        children: [ { path: ':id', component: TaskDetailsComponent, data: { mode: 'embedded' }, resolve: { task: TaskResolverService } } ]
+        children: [
+          { 
+            path: ':id',
+            component: TaskDetailsComponent,
+            data: { mode: 'embedded' }
+          }
+        ]
       },
-      { path: 'create', component: TaskFormModalComponent, outlet: 'modal'},
       {
-        path: 'task/:id', component: TaskDetailsComponent, data: { mode: 'standalone' }, resolve: { task: TaskResolverService } 
+        path: 'create',
+        component: TaskFormModalComponent,
+        outlet: 'modal',
+        data: { mode: 'create' }
       },
-      { path: 'task/:id', component: TaskFormModalComponent, outlet: 'modal', resolve: { task: TaskResolverService }},
+      {
+        path: 'task/:id',
+        component: TaskDetailsComponent,
+        data: { mode: 'standalone' }
+      },
+      {
+        path: 'task/:id',
+        component: TaskFormModalComponent,
+        outlet: 'modal',
+        data: { mode: 'edit' }
+      },
     ]
   }
 ];
