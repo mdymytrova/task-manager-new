@@ -4,12 +4,12 @@ import { ITask } from '../interfaces';
 // get
 export const loadTasksRequest = createAction('[Tasks] Load tasks start');
 export const loadTasksSuccess = createAction('[Tasks] Load tasks success', props<{tasks: ITask[]}>());
-export const loadTasksFailure = createAction('[Tasks] Load tasks falure');
+export const loadTasksFailure = createAction('[Tasks] Load tasks falure', props<{errorMessage: string}>());
 
 // get by id
 export const loadTaskRequest = createAction('[Tasks] Load task start', props<{id: string}>());
 export const loadTaskSuccess = createAction('[Tasks] Load task success', props<{task: ITask}>());
-export const loadTaskFailure = createAction('[Tasks] Load task falure');
+export const loadTaskFailure = createAction('[Tasks] Load task falure', props<{errorMessage: string}>());
 
 // create
 export const createTaskRequest = createAction('[Tasks] Create task start', props<{task: ITask}>());

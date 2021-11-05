@@ -7,4 +7,6 @@ const tasksSelector = (state: fromApp.AppState) => {
 
 export const getSelectedTask = createSelector(tasksSelector, (state) => state.selectedTask);
 export const getModalState = createSelector(tasksSelector, (state) => state.modalOpen);
-export const getError = createSelector(tasksSelector, (state) => state.error);
+export const getLoadError = createSelector(tasksSelector, (state) => state.errorLoad);
+export const getCreateUpdateActionError = createSelector(tasksSelector, (state) => state.errorCreateUpdate);
+export const getDeleteActionError = createSelector(tasksSelector, (state) => state.errorDelete);

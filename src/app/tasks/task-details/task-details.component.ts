@@ -8,7 +8,7 @@ import { ITask } from '../interfaces';
 import { ErrorAlert } from '../../modal/error-alert/error-alert.component';
 import * as fromApp from '../../store/app.reducer';
 import { deleteTaskRequest, resetError } from '../store/tasks.actions';
-import { getError } from '../store/tasks.selector';
+import { getDeleteActionError } from '../store/tasks.selector';
 
 @Component({
   selector: 'app-task-details',
@@ -24,10 +24,11 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
   constructor(private route: ActivatedRoute, private dialog: MatDialog, private store: Store<fromApp.AppState>) { }
 
   public ngOnInit(): void {
+    this.store.dispatch(resetError());
     this.storeSubscription = this.store.select('tasks').subscribe(tasks => {
       this.task = tasks.selectedTask;
     });
-    this.errorSubscription = this.store.select(getError).subscribe(errorMessage => {
+    this.errorSubscription = this.store.select(getDeleteActionError).subscribe(errorMessage => {
       if (errorMessage) {
         this.dialog.open(ErrorAlert, { data: errorMessage });
       }

@@ -1,12 +1,14 @@
 import { createReducer, on, Store } from '@ngrx/store';
 import { ITask } from '../interfaces';
-import { createTaskFailure, createTaskRequest, createTaskSuccess, deleteTaskFailure, deleteTaskRequest, deleteTaskSuccess, loadTaskRequest, loadTasksRequest, loadTasksSuccess, loadTaskSuccess, modalOpen, resetError, selectTaskRequest, selectTaskSuccess, updateTaskFailure, updateTaskRequest, updateTaskSuccess } from './tasks.actions';
+import { createTaskFailure, createTaskRequest, createTaskSuccess, deleteTaskFailure, deleteTaskRequest, deleteTaskSuccess, loadTaskFailure, loadTaskRequest, loadTasksFailure, loadTasksRequest, loadTasksSuccess, loadTaskSuccess, modalOpen, resetError, selectTaskRequest, selectTaskSuccess, updateTaskFailure, updateTaskRequest, updateTaskSuccess } from './tasks.actions';
 
 export interface ITasksState {
     tasks: ITask[];
     isLoading: boolean;
     selectedTask: ITask;
-    error: string;
+    errorLoad: string;
+    errorCreateUpdate: string;
+    errorDelete: string;
     modalOpen: boolean;
 };
 
@@ -14,7 +16,9 @@ export const initialState: ITasksState = {
     tasks: [],
     isLoading: false,
     selectedTask: null,
-    error: null,
+    errorLoad: null,
+    errorCreateUpdate: null,
+    errorDelete: null,
     modalOpen: false
 };
 
@@ -23,19 +27,31 @@ export const tasksReducer = createReducer(
     on(loadTasksRequest, (state) => {
         return {
             ...state,
+            tasks: [],
+            errorLoad: null,
             isLoading: true
         };
     }),
     on(loadTasksSuccess, (state, {tasks}) => {
         return {
             ...state,
+            errorLoad: null,
             isLoading: false,
             tasks: tasks
+        };
+    }),
+    on(loadTasksFailure, (state, {errorMessage}) => {
+        return {
+            ...state,
+            isLoading: false,
+            errorLoad: errorMessage
         };
     }),
     on(loadTaskRequest, (state) => {
         return {
             ...state,
+            selectedTask: null,
+            errorLoad: null,
             isLoading: true
         };
     }),
@@ -43,7 +59,15 @@ export const tasksReducer = createReducer(
         return {
             ...state,
             isLoading: false,
+            errorLoad: null,
             selectedTask: task
+        };
+    }),
+    on(loadTaskFailure, (state, {errorMessage}) => {
+        return {
+            ...state,
+            isLoading: false,
+            errorLoad: errorMessage
         };
     }),
     on(createTaskRequest, (state) => {
@@ -64,7 +88,7 @@ export const tasksReducer = createReducer(
         return {
             ...state,
             isLoading: false,
-            error: errorMessage
+            errorCreateUpdate: errorMessage
         };
     }),
     on(updateTaskRequest, (state) => {
@@ -88,7 +112,7 @@ export const tasksReducer = createReducer(
         return {
             ...state,
             isLoading: false,
-            error: errorMessage
+            errorCreateUpdate: errorMessage
         };
     }),
     on(deleteTaskRequest, (state) => {
@@ -109,7 +133,7 @@ export const tasksReducer = createReducer(
         return {
             ...state,
             isLoading: false,
-            error: errorMessage
+            errorDelete: errorMessage
         };
     }),
     on(selectTaskRequest, (state) => {
@@ -132,7 +156,9 @@ export const tasksReducer = createReducer(
     on(resetError, (state) => {
         return {
             ...state,
-            error: null
+            errorCreateUpdate: null,
+            errorDelete: null,
+            errorLoad: null
         };
     })
 );

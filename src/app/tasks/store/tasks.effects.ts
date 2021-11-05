@@ -26,7 +26,9 @@ export class TasksEffects {
                         return loadTasksSuccess({ tasks });
                     }),
                     catchError((errorResponse) => {
-                        return of(loadTasksFailure());
+                        return of(loadTasksFailure({
+                            errorMessage: `Load tasks error: ${errorResponse?.error?.error}` || 'An error occured.'
+                        }));
                     })
                 )
             )
@@ -42,7 +44,9 @@ export class TasksEffects {
                         return loadTaskSuccess({ task: { ...task, id: action.id } });
                     }),
                     catchError((errorResponse) => {
-                        return of(loadTaskFailure());
+                        return of(loadTaskFailure({
+                            errorMessage: `Load task error: ${errorResponse?.error?.error}` || 'An error occured.'
+                        }));
                     })
                 )
             )
@@ -58,7 +62,9 @@ export class TasksEffects {
                         return createTaskSuccess({ task: { ...action.task, id: taskResponse.name} });
                     }),
                     catchError((errorResponse) => {
-                        return of(createTaskFailure({errorMessage: errorResponse?.error?.error || 'An error occured.'}));
+                        return of(createTaskFailure({
+                            errorMessage: `Create task error: ${errorResponse?.error?.error}` || 'An error occured.'
+                        }));
                     })
                 )
             )
@@ -74,7 +80,9 @@ export class TasksEffects {
                         return updateTaskSuccess({ task });
                     }),
                     catchError((errorResponse) => {
-                        return of(updateTaskFailure({errorMessage: errorResponse?.error?.error || 'An error occured.'}));
+                        return of(updateTaskFailure({
+                            errorMessage: `Update task error: ${errorResponse?.error?.error}` || 'An error occured.'
+                        }));
                     })
                 )
             )
@@ -91,7 +99,9 @@ export class TasksEffects {
                         return deleteTaskSuccess({ id: action.id });
                     }),
                     catchError((errorResponse) => {
-                        return of(deleteTaskFailure({errorMessage: errorResponse?.error?.error || 'An error occured.'}));
+                        return of(deleteTaskFailure({
+                            errorMessage: `Delete task error: ${errorResponse?.error?.error}` || 'An error occured.'
+                        }));
                     })
                 )
             )

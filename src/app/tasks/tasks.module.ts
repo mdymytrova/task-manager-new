@@ -13,6 +13,7 @@ import { MaterialModule } from '../material/material.module';
 import { TaskRoutingModule } from './tasks-routing.module';
 import { TaskFormComponent } from './task-form/task-form.component';
 import { TasksDrawerComponent } from './tasks-drawer/tasks-drawer.component';
+import { TaskGuard } from '../services/task.guard';
 
 @NgModule({
   declarations: [
@@ -33,6 +34,7 @@ import { TasksDrawerComponent } from './tasks-drawer/tasks-drawer.component';
     MaterialModule,
     TaskRoutingModule
   ],
-  exports: [TasksComponent]
+  exports: [TasksComponent],
+  providers: [TaskGuard]
 })
 export class TasksModule { }

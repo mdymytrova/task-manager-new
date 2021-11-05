@@ -7,6 +7,7 @@ import { TaskResolverService } from '../services/task-resolver.service';
 import { TaskDetailsComponent } from './task-details/task-details.component';
 import { TasksComponent } from './tasks.component';
 import { TasksDrawerComponent } from './tasks-drawer/tasks-drawer.component';
+import { TaskGuard } from '../services/task.guard';
 
 const appRoutes: Routes = [
   { 
@@ -20,7 +21,8 @@ const appRoutes: Routes = [
           { 
             path: ':id',
             component: TaskDetailsComponent,
-            data: { mode: 'embedded' }
+            data: { mode: 'embedded' },
+            canActivate: [TaskGuard]
           }
         ]
       },
@@ -33,7 +35,8 @@ const appRoutes: Routes = [
       {
         path: 'task/:id',
         component: TaskDetailsComponent,
-        data: { mode: 'standalone' }
+        data: { mode: 'standalone' },
+        canActivate: [TaskGuard]
       },
       {
         path: 'task/:id',

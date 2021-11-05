@@ -9,7 +9,7 @@ import * as fromApp from '../../store/app.reducer';
 import { Store } from '@ngrx/store';
 import { createTaskRequest, resetError, updateTaskRequest } from '../store/tasks.actions';
 import { Subscription } from 'rxjs';
-import { getError, getModalState, getSelectedTask } from '../store/tasks.selector';
+import { getModalState, getSelectedTask, getCreateUpdateActionError } from '../store/tasks.selector';
 import { ErrorAlert } from '../../modal/error-alert/error-alert.component';
 
 @Component({
@@ -58,7 +58,7 @@ export class TaskFormComponent implements OnInit, OnDestroy{
                 this.dialogRef.close(this.task);
             }
         });
-        this.errorSubscription = this.store.select(getError).subscribe(errorMessage => {
+        this.errorSubscription = this.store.select(getCreateUpdateActionError).subscribe(errorMessage => {
             if (errorMessage) {
                 this.dialog.open(ErrorAlert, { data: errorMessage });
             }
