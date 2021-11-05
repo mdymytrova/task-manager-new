@@ -3,6 +3,6 @@
         *ngFor="let task of taskList; let i = index"
         [task]="task"
         [selectedTaskId]="selectedTaskId"
-        (click)="onTaskSelection(task.id)">
+        (click)="onTaskSelection(task)">
     </app-task-list-item>
 </div>

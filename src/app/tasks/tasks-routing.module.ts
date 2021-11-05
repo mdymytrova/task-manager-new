@@ -7,6 +7,7 @@ import { TaskResolverService } from '../services/task-resolver.service';
 import { TaskDetailsComponent } from './task-details/task-details.component';
 import { TasksComponent } from './tasks.component';
 import { TasksDrawerComponent } from './tasks-drawer/tasks-drawer.component';
+import { TaskGuard } from '../services/task.guard';
 
 const appRoutes: Routes = [
   { 
@@ -16,13 +17,33 @@ const appRoutes: Routes = [
     children: [
       {
         path: '', component: TasksDrawerComponent,
-        children: [ { path: ':id', component: TaskDetailsComponent, data: { mode: 'embedded' }, resolve: { task: TaskResolverService } } ]
+        children: [
+          { 
+            path: ':id',
+            component: TaskDetailsComponent,
+            data: { mode: 'embedded' },
+            canActivate: [TaskGuard]
+          }
+        ]
       },
-      { path: 'create', component: TaskFormModalComponent, outlet: 'modal'},
       {
-        path: 'task/:id', component: TaskDetailsComponent, data: { mode: 'standalone' }, resolve: { task: TaskResolverService } 
+        path: 'create',
+        component: TaskFormModalComponent,
+        outlet: 'modal',
+        data: { mode: 'create' }
       },
-      { path: 'task/:id', component: TaskFormModalComponent, outlet: 'modal', resolve: { task: TaskResolverService }},
+      {
+        path: 'task/:id',
+        component: TaskDetailsComponent,
+        data: { mode: 'standalone' },
+        canActivate: [TaskGuard]
+      },
+      {
+        path: 'task/:id',
+        component: TaskFormModalComponent,
+        outlet: 'modal',
+        data: { mode: 'edit' }
+      },
     ]
   }
 ];

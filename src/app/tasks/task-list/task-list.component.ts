@@ -1,7 +1,11 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Store } from '@ngrx/store';
 
 import { ITask } from '../interfaces';
+import * as fromApp from '../../store/app.reducer';
+import { selectTaskSuccess } from '../store/tasks.actions';
+import { Subscription } from 'rxjs';
 
 
 @Component({
@@ -9,24 +13,31 @@ import { ITask } from '../interfaces';
   templateUrl: './task-list.component.html',
   styleUrls: ['./task-list.component.scss']
 })
-export class TaskListComponent implements OnInit {
+export class TaskListComponent implements OnInit, OnDestroy {
   @Input() public taskList: ITask[];
 
   public selectedTaskId: string;
+  private storeSubscription: Subscription;
 
-  constructor(private router: Router, private route: ActivatedRoute) { }
+  constructor(private router: Router, private route: ActivatedRoute, private store: Store<fromApp.AppState>) { }
 
   public ngOnInit() {
-    this.selectedTaskId = this.route.firstChild?.snapshot?.params?.id;
+    this.storeSubscription = this.store.select('tasks').subscribe(tasks => {
+      this.selectedTaskId = tasks.selectedTask?.id;
+    });
   }
 
-  public onTaskSelection(taskId) {
-    if (this.selectedTaskId === taskId) {
-      this.selectedTaskId = null;
+  public ngOnDestroy() {
+    this.storeSubscription.unsubscribe();
+  }
+
+  public onTaskSelection(task: ITask) {
+    if (this.selectedTaskId === task.id) {
+      this.store.dispatch(selectTaskSuccess({ task: null }));
       this.router.navigate(['/tasks']);
     } else {
-      this.selectedTaskId = taskId;
-      this.router.navigate(['/tasks', taskId]);
+      this.store.dispatch(selectTaskSuccess({ task }));
+      this.router.navigate(['/tasks', task.id]);
     }
   }
 }

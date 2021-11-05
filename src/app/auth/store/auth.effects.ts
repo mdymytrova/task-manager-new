@@ -49,7 +49,8 @@ export class AuthEffects {
                                 email: authResponse.email,
                                 localId: authResponse.localId,
                                 expirationDate,
-                                idToken: authResponse.idToken
+                                idToken: authResponse.idToken,
+                                redirect: true
                             }
                         });
                     }),
@@ -71,7 +72,9 @@ export class AuthEffects {
                 localStorage.setItem('userData', JSON.stringify(user));
                 const expiresIn = new Date(authPayload.payload.expirationDate).getTime() - new Date().getTime();
                 this.authService.setExpirationTimer(expiresIn);
-                this.router.navigate(['']);
+                if (authPayload.payload.redirect) {
+                    this.router.navigate(['']);
+                }
             })
         ), { dispatch: false }
     );
@@ -103,7 +106,8 @@ export class AuthEffects {
                             email: userData.email,
                             localId: userData.id,
                             expirationDate: new Date(userData.tokenExpirationDate),
-                            idToken: userData._token
+                            idToken: userData._token,
+                            redirect: false
                         }
                     });
                 }

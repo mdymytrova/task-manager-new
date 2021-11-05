@@ -1,12 +1,14 @@
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { map, Subscription } from 'rxjs';
 import { MatSidenav } from '@angular/material/sidenav';
+import { MatDialog } from '@angular/material/dialog';
+import { Store } from '@ngrx/store';
 
-import { ITask, TaskEvent } from '../interfaces';
-
-import { TasksEventService } from '../../services/tasks-event.service';
-import { TasksDataService } from '../../services/tasks-data.service';
-
+import { ITask } from '../interfaces';
+import * as fromApp from '../../store/app.reducer';
+import { loadTasksRequest } from '../store/tasks.actions';
+import { ErrorAlert } from '../../modal/error-alert/error-alert.component';
+import { getLoadError } from '../store/tasks.selector';
 
 @Component({
     selector: 'app-tasks-drawer',
@@ -17,27 +19,27 @@ export class TasksDrawerComponent implements OnInit, OnDestroy {
     @ViewChild('drawer') drawer: MatSidenav;
 
     public taskList: ITask[];
-    private taskEventSubscription: Subscription;
     public previewOpen = false;
+    private storeSubscription: Subscription;
+    private errorSubscription: Subscription;
 
-    constructor(private tasksDataService: TasksDataService, private tasksEventService: TasksEventService) {}
+    constructor(private store: Store<fromApp.AppState>, private dialog: MatDialog) {}
 
     public ngOnInit(): void {
-        this.taskEventSubscription = this.tasksEventService.onTaskListUpdate.subscribe(this.taskEventHandler);
-        this.setTasks();
+        this.store.dispatch(loadTasksRequest());
+        this.storeSubscription = this.store.select('tasks').subscribe((tasksStore) => {
+            this.taskList = tasksStore.tasks;
+        });
+        this.errorSubscription = this.store.select(getLoadError).subscribe(errorMessage => {
+            if (errorMessage) {
+              this.dialog.open(ErrorAlert, { data: errorMessage });
+            }
+          });
     }
 
     public ngOnDestroy() {
-        this.taskEventSubscription.unsubscribe()
+        this.storeSubscription.unsubscribe();
+        this.errorSubscription.unsubscribe();
     }
 
-    private taskEventHandler = (event: TaskEvent<ITask> | TaskEvent<ITask[]>) => {
-        this.setTasks();
-    }
-
-    private setTasks() {
-        this.tasksDataService.getTasks().subscribe((tasks) => {
-            this.taskList = tasks;
-        });
-    }
 }

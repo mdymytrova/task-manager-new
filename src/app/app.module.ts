@@ -18,6 +18,7 @@ import { SearchComponent } from './search/search.component';
 import { AuthInterceptorService } from './auth/auth-interceptor.service';
 import * as fromApp from './store/app.reducer';
 import { AuthEffects } from './auth/store/auth.effects';
+import { TasksEffects } from './tasks/store/tasks.effects';
 
 @NgModule({
   declarations: [
@@ -32,7 +33,7 @@ import { AuthEffects } from './auth/store/auth.effects';
     HttpClientModule,
     CommonModule,
     StoreModule.forRoot(fromApp.appReducer),
-    EffectsModule.forRoot([AuthEffects]),
+    EffectsModule.forRoot([AuthEffects, TasksEffects]),
     MaterialModule,
     AuthModule,
     AppRoutingModule
