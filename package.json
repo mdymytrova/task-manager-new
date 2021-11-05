@@ -11,7 +11,9 @@
     "serve:ssr": "node dist/task-manager/server/main.js",
     "build:ssr": "ng build && ng run task-manager:server",
     "prerender": "ng run task-manager:prerender",
-    "prebuild:ssr": "ngcc"
+    "prebuild:ssr": "ngcc",
+    "start:heroku":"node dist/server",
+    "postinstall":"npm run build:ssr" 
   },
   "private": true,
   "dependencies": {
