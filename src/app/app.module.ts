@@ -28,7 +28,7 @@ import { TasksEffects } from './tasks/store/tasks.effects';
     SearchComponent
   ],
   imports: [
-    BrowserModule,
+    BrowserModule.withServerTransition({ appId: 'serverApp' }),
     BrowserAnimationsModule,
     HttpClientModule,
     CommonModule,

@@ -3,7 +3,7 @@ import { Priority } from '../tasks/enums';
 
 @Pipe({ name: 'priorityIcon' })
 export class PriorityIconPipe implements PipeTransform {
-    public transform(value: TaskType): string {
+    public transform(value: Priority): string {
         const icons = {
             [Priority.CRITICAL]: 'bookmark',
             [Priority.BLOCKER]: 'do_not_disturb_on',
